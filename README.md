@@ -154,3 +154,7 @@ POST Parameter:
 | Parameter | Type     | Description                                 |
 | :-------- | :------- | :------------------------------------------ |
 | `id`      | `string` | **Required**. candidate_id of item to fetch |
+
+## Documentation
+
+[Postman Documentation](https://documenter.getpostman.com/view/15990639/2s9YeBdYto)
