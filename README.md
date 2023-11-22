@@ -1,66 +1,145 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+# Jobseeker Fullstack Engineer Test
 
-## About Laravel
+Guide to cloning and setting up a Laravel project, connecting it to a database, and migrating the database.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Prerequisites
+Make sure you have the following installed on your machine:
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- [Git](https://git-scm.com/)
+- [Composer](https://getcomposer.org/)
+- [PHP](https://www.php.net/)
+## Clone & Install
 
-## Learning Laravel
+```bash
+git clone https://github.com/IGedeMiarta/jobseeker-test.git
+```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Install Dependencies
+```bash
+cd jobseeker-test
+composer install
+```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### Environment Configuration
+Copy the `.env.example` file to create a new `.env` file:
+```bash
+cp .env.example .env
+```
+Open the .env file and configure your database connection:
+```dotenv
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=db_test
+DB_USERNAME=root
+DB_PASSWORD=
+```
+### Migrate the Database
+Run the following command to migrate the database:
+```bash
+php artisan migrate
+```
+### Seed the Database (Optional)
+If you want to populate the database with Faker data, use the `--seed` flag
+```bash
+php artisan migrate --seed
+```
+### Run Application
+```bash
+php artisan serve
+```
+Visit `http://localhost:8000` in your browser to access the Laravel application.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
 
-## Laravel Sponsors
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
 
-### Premium Partners
+## API Reference
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+#### Get all candidate
 
-## Contributing
+```http
+  GET /api/v1/candidate
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `email` | `string` | search by email |
+| `phone` | `string` | search by phone_number |
+| `fullname` | `string` | search by full_name |
+| `dob` | `date` | search by date of birth `dd/mm/yyyy` |
+| `pob` | `string` | search by place of birth |
+| `gender` | `string` | search by gender (only `F` or `M`) |
+| `year_exp` | `integer` | search by year of experience  |
+| `salary` | `integer` | search by of last salary |
+| `search` | `string` | search email, phone_number, full_name, pob |
+| `order` | `string` | filter by [`ASC`,`DESC`] |
+| `paginate` | `integer` | order paginate (default 10) |
 
-## Code of Conduct
+Example Request With Parameter:
+```bash
+GET /api/v1/candidate?pob=denpasar&gender=F&paginate=50
+```
+The data where will returns candidate where place of birth is in denpasar, and gender female, the data will show per 50 items
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+#### Add New Candidate
 
-## Security Vulnerabilities
+```http
+  POST api/v1/candidate
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `email` | `string` | required, email, unique |
+| `phone_number` | `string` | required, unique |
+| `full_name` | `string` | required  |
+| `dob` | `date` | required,`yyyy-mm-dd`  |
+| `pob` | `string` | required  |
+| `gender` | `string` | required,only(`F`,`M`)  |
+| `year_exp` | `integer` | required  |
+| `last_salary` | `integer` | *optional*  |
 
-## License
+#### Get Item By Id
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```http
+  GET api/v1/candidate/{id}
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `id`      | `string` | **Required**. candidate_id of item to fetch |
+
+#### Update Candidate
+
+```http
+  PUT api/v1/candidate/{id}
+```
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `id`      | `string` | **Required**. candidate_id of item to fetch |
+
+POST Parameter:
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `email` | `string` | required, email, unique |
+| `phone_number` | `string` | required, unique |
+| `full_name` | `string` | required  |
+| `dob` | `date` | required,`yyyy-mm-dd`  |
+| `pob` | `string` | required  |
+| `gender` | `string` | required,only(`F`,`M`)  |
+| `year_exp` | `integer` | required  |
+| `last_salary` | `integer` | *optional*  |
+
+#### Delete Candidate
+
+```http
+  DELETE api/v1/candidate/{id}
+```
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `id`      | `string` | **Required**. candidate_id of item to fetch |
+
+
+
+

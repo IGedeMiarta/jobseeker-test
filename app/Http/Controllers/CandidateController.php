@@ -34,7 +34,6 @@ class CandidateController extends Controller
             $candidate = $candidate->where('email','like','%'.$search.'%')
                             ->orWhere('phone_number','like','%'.$search.'%')
                             ->orWhere('full_name','like','%'.$search.'%')
-                            ->orWhere('pob','like','%'.$search.'%')
                             ->orWhere('pob','like','%'.$search.'%');
         }
         if ($email) {
